@@ -1,0 +1,15 @@
+C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\bin\Debug\BankAccountPrototype.exe.config
+C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\bin\Debug\BankAccountPrototype.exe
+C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\bin\Debug\BankAccountPrototype.pdb
+C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\obj\Debug\BankAccountPrototype.csprojResolveAssemblyReference.cache
+C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\obj\Debug\BankAccountPrototype.exe
+C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\obj\Debug\BankAccountPrototype.pdb
+C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\bin\Debug\EntityFramework.dll
+C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\bin\Debug\EntityFramework.xml
+C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\obj\Debug\BankAccountPrototype.Migrations.InitialCreate.resources
+C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\obj\Debug\BankAccountPrototype.csproj.GenerateResource.Cache
+C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\obj\Debug\BankAccountPrototype.Migrations.RemoveWithdraw.resources
+C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\obj\Debug\BankAccountPrototype.Migrations.OneToOne.resources
+C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\obj\Debug\BankAccountPrototype.Migrations.RemoveAccountId.resources
