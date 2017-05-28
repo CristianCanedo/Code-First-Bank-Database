@@ -98,7 +98,7 @@ namespace BankAccountPrototype
             switch (sel)
             {
                 case 1:
-                    // CustomerLogin() 
+                    CustomerLogin(); 
                     break;
                 case 2:
                     CreateCustomer();
@@ -130,22 +130,11 @@ namespace BankAccountPrototype
                 Console.WriteLine("|   NEW CUSTOMER ACCOUNT   |");
                 Console.WriteLine("+--------------------------+");
                 Console.WriteLine("|                          |");
-                Console.Write("|First Name: ");
-                var firstName = Console.ReadLine();
 
-                Console.Write("|Last Name: ");
-                var lastName = Console.ReadLine();
-
-                Console.Write("|Birthdate(August 8, 1995): ");
-                var birthDate = DateTime.Parse(Console.ReadLine());
-
-                Console.Write("|Account Type: ");
-                var accountType = Console.ReadLine();
-
-                Console.Write("|Desired Username: ");
+                Console.Write("|New Username: ");
                 var username = Console.ReadLine();
 
-                Console.Write("|Desired Password: ");
+                Console.Write("|New Password: ");
                 Console.ForegroundColor = ConsoleColor.Black;
                 var password = Console.ReadLine();
                 Console.ForegroundColor = ConsoleColor.Gray;
@@ -168,10 +157,6 @@ namespace BankAccountPrototype
                 // Save information as new Customer
                 var customer = new Customer
                 {
-                    FirstName = firstName,
-                    LastName = lastName,
-                    BirthDate = birthDate,
-                    AccountType = accountType,
                     Username = username,
                     Password = password
                 };
@@ -184,10 +169,9 @@ namespace BankAccountPrototype
                 
             }
         }
-
         private static void CustomerLogin()
         {
-            Console.Clear();
+             Console.Clear();
             Console.WriteLine("\n        Federal Bank");
             Console.WriteLine("+--------------------------+");
             Console.WriteLine("|      CUSTOMER LOGIN      |");
@@ -201,13 +185,29 @@ namespace BankAccountPrototype
 
             using (var db = new CustomerContext())
             {
-                var cust = from c in db.Customers
-                            where c.Username == username
-                            select c;
-                
+                Customer cust = (from c in db.Customers
+                                 where c.Username.Equals(username)
+                                 select c).FirstOrDefault();
 
+                if (cust == null)
+                {
+                    Console.WriteLine("\nInvalid username, press enter to try again");
+                    Console.ReadLine();
+                    CustomerLogin();
+                }
+                else if (!cust.Password.Equals(password))
+                {
+                    Console.WriteLine("\nInvalid password, press enter to try again");
+                    Console.ReadLine();
+                    CustomerLogin();
+                }
+                else
+                {
+                    Console.WriteLine("\nYou have successfully logged in!");
+                    Console.WriteLine("\nPress enter to continue to account menu!");
+                    Console.ReadLine();
+                }
             }
-
 
         }
 
