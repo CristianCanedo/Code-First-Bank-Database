@@ -9,8 +9,7 @@ namespace BankAccountPrototype.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
-            ContextKey = "BankAccountPrototype.CustomerContext";
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(BankAccountPrototype.CustomerContext context)

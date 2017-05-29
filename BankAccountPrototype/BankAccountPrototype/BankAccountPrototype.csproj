@@ -51,42 +51,23 @@
   <ItemGroup>
     <Compile Include="Account.cs" />
     <Compile Include="Customer.cs" />
-    <Compile Include="Migrations\201705270315405_InitialCreate.cs" />
-    <Compile Include="Migrations\201705270315405_InitialCreate.Designer.cs">
-      <DependentUpon>201705270315405_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705270352128_Remove Withdraw.cs" />
-    <Compile Include="Migrations\201705270352128_Remove Withdraw.Designer.cs">
-      <DependentUpon>201705270352128_Remove Withdraw.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705270407418_OneToOne.cs" />
-    <Compile Include="Migrations\201705270407418_OneToOne.Designer.cs">
-      <DependentUpon>201705270407418_OneToOne.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705270414384_RemoveAccountId.cs" />
-    <Compile Include="Migrations\201705270414384_RemoveAccountId.Designer.cs">
-      <DependentUpon>201705270414384_RemoveAccountId.cs</DependentUpon>
+    <Compile Include="Migrations\201705290326021_Initial.cs" />
+    <Compile Include="Migrations\201705290326021_Initial.Designer.cs">
+      <DependentUpon>201705290326021_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="ProcessTransactionEventArgs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Transaction.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201705270315405_InitialCreate.resx">
-      <DependentUpon>201705270315405_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705270352128_Remove Withdraw.resx">
-      <DependentUpon>201705270352128_Remove Withdraw.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705270407418_OneToOne.resx">
-      <DependentUpon>201705270407418_OneToOne.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705270414384_RemoveAccountId.resx">
-      <DependentUpon>201705270414384_RemoveAccountId.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201705290326021_Initial.resx">
+      <DependentUpon>201705290326021_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

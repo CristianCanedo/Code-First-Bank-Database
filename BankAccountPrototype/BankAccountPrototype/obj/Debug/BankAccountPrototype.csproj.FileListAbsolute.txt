@@ -8,8 +8,5 @@ C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAcc
 C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\bin\Debug\EntityFramework.SqlServer.dll
 C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\bin\Debug\EntityFramework.xml
 C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\bin\Debug\EntityFramework.SqlServer.xml
-C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\obj\Debug\BankAccountPrototype.Migrations.InitialCreate.resources
+C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\obj\Debug\BankAccountPrototype.Migrations.Initial.resources
 C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\obj\Debug\BankAccountPrototype.csproj.GenerateResource.Cache
-C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\obj\Debug\BankAccountPrototype.Migrations.RemoveWithdraw.resources
-C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\obj\Debug\BankAccountPrototype.Migrations.OneToOne.resources
-C:\Users\RAWR\documents\visual studio 2017\Projects\BankAccountPrototype\BankAccountPrototype\obj\Debug\BankAccountPrototype.Migrations.RemoveAccountId.resources
