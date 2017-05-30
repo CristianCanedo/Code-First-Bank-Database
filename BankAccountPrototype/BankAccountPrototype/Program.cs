@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +12,13 @@ namespace BankAccountPrototype
 {
     class Program
     {
+        enum MainMenu { Admin = 1, Customer, Exit };
         static int Main()
         {
+            int admin = (int)MainMenu.Admin;
+            int customer = (int)MainMenu.Customer;
+            int exit = (int)MainMenu.Exit;
+
             Console.Clear();
             Console.WriteLine("\n     Federal Bank");
             Console.WriteLine("+--------------------+");
@@ -31,17 +36,35 @@ namespace BankAccountPrototype
             try
             {
                 int sel = int.Parse(Console.ReadLine());
-                switch (sel)
+
+                if (sel == admin)
                 {
-                    case 1: DisplayAdminMenu();
-                        break;
-                    case 2: DisplayCustomerMenu();
-                        break;
-                    case 3: 
-                        return 0;
-                    default:
-                        throw new FormatException();
+                    DisplayAdminMenu();
                 }
+                else if (sel == customer)
+                {
+                    DisplayCustomerMenu();
+                }
+                else if (sel == exit)
+                {
+                    return 0;
+                }
+                else
+                {
+                    throw new FormatException();
+                }
+
+                //switch (sel)
+                //{
+                //    case 1: 
+                //        break;
+                //    case 2: DisplayCustomerMenu();
+                //        break;
+                //    case 3: 
+                //        return 0;
+                //    default:
+                //        throw new FormatException();
+                //}
             }
             catch (FormatException)
             {
@@ -453,7 +476,7 @@ namespace BankAccountPrototype
                             break;
                         case 3: Deposit(custId);
                             break;
-                        case 4: //Withdraw()
+                        case 4: Withdraw(custId);
                             break;
                         case 5: DisplayTransactionHistory(custId);
                             break;
@@ -633,6 +656,67 @@ namespace BankAccountPrototype
             }
 
             
+        }
+
+        private static void Withdraw(int customerId)
+        {
+            using (var db = new CustomerContext())
+            {
+                var cust = db.Customers.Find(customerId);
+                var custId = cust.CustomerId;
+                var bal = cust.Account.AccountBalance;
+
+                string type = "Withdraw"; // Transaction Type
+
+                try
+                {
+                    Console.Clear();
+                    Console.WriteLine("\n        Federal Bank");
+                    Console.WriteLine("+--------------------------+");
+                    Console.WriteLine("|      WITHDRAW MENU       |");
+                    Console.WriteLine("+--------------------------+");
+                    Console.WriteLine("|1.) Back                  |");
+                    Console.WriteLine("+--------------------------+");
+                    Console.WriteLine("|                          |");
+
+                    Console.Write("|Enter amount to withdraw: $");
+                    decimal amount = decimal.Parse(Console.ReadLine()); // Transaction Amount
+                    Console.WriteLine("|                          |");
+                    Console.WriteLine("+--------------------------+");
+
+                    if (amount == 1)
+                    {
+                        DisplayAccountMenu(custId);
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nPlease Wait, Saving Changes...");
+                    }
+
+                    MakeTransaction(custId, amount, type);
+
+                    Console.WriteLine("Changes have been saved successfully!");
+                    Console.Write("\nPress [ENTER] to return to Account Menu.");
+                    Console.ReadLine();
+                    DisplayAccountMenu(custId);
+
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("\nInvalid input, press [ENTER] to try again.");
+                    Console.ReadLine();
+                    Deposit(custId);
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    Console.WriteLine("\nInvalid input, press [ENTER] to try again.");
+                    Console.ReadLine();
+                    Deposit(custId);
+                }
+
+            }
+
+
         } 
 
         private static void DisplayTransactionHistory(int customerId)
@@ -698,22 +782,43 @@ namespace BankAccountPrototype
                                       where a.AccountId.Equals(custId)
                                       select a).FirstOrDefault();
 
-                currentBal.AccountBalance += amount;
-                db.SaveChanges();
-
-                // Create a new transaction
-                var trans = new Transaction
+                // If incoming type is Deposit, add
+                // If incoming type is Withdraw, subtract
+                if (tranType == "Deposit")
                 {
-                    Account = cust.Account,
-                    TransactionType = tranType,
-                    Amount = amount,
-                    Date = DateTime.Now
-                };
+                    currentBal.AccountBalance += amount;
+                    db.SaveChanges();
 
-                // Save transaction
-                cust.Account.Transactions.Add(trans);
-                db.Transactions.Add(trans);
-                db.SaveChanges();
+                    var deposit = new Transaction
+                    {
+                        Account = cust.Account,
+                        TransactionType = tranType,
+                        Amount = amount,
+                        Date = DateTime.Now
+                    };
+
+                    cust.Account.Transactions.Add(deposit);
+                    db.Transactions.Add(deposit);
+                    db.SaveChanges();
+                }
+                else if (tranType == "Withdraw")
+                {
+                    currentBal.AccountBalance -= amount;
+                    db.SaveChanges();
+
+                    var withdraw = new Transaction
+                    {
+                        Account = cust.Account,
+                        TransactionType = tranType,
+                        Amount = -amount,
+                        Date = DateTime.Now
+                    };
+
+                    cust.Account.Transactions.Add(withdraw);
+                    db.Transactions.Add(withdraw);
+                    db.SaveChanges();
+                }
+                
             }
         }
     }
