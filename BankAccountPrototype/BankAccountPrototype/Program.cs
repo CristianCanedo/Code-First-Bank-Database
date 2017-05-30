@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,13 +10,11 @@ using System.Runtime.Remoting.Contexts;
 
 namespace BankAccountPrototype
 {
-    // TODO: Implement functioning event to process transactions made
-    public delegate void ProcessTransactionEventHandler(int custId, decimal amount, string tranType);
-
     class Program
     {
         static int Main()
         {
+            Console.Clear();
             Console.WriteLine("\n     Federal Bank");
             Console.WriteLine("+--------------------+");
             Console.WriteLine("|     MAIN MENU      |");
@@ -29,20 +27,28 @@ namespace BankAccountPrototype
             Console.WriteLine("+--------------------+");
 
             Console.Write("\nEnter selection: ");
-            int sel = int.Parse(Console.ReadLine());
 
-            switch (sel)
+            try
             {
-                case 1: DisplayAdminMenu(); break;
-                case 2: DisplayCustomerMenu(); break;
-                case 3: return 0;
-                default:
-                    Console.WriteLine("Invalid input, press enter to try again");
-                    Console.ReadLine();
-                    Main();
-                    break;
+                int sel = int.Parse(Console.ReadLine());
+                switch (sel)
+                {
+                    case 1: DisplayAdminMenu();
+                        break;
+                    case 2: DisplayCustomerMenu();
+                        break;
+                    case 3: 
+                        return 0;
+                    default:
+                        throw new FormatException();
+                }
             }
-
+            catch (FormatException)
+            {
+                Console.WriteLine("\nInvalid input, press [ENTER] to try again.");
+                Console.ReadLine();
+                Main();
+            }
             return 0;
         }
 
@@ -63,26 +69,31 @@ namespace BankAccountPrototype
             Console.WriteLine("|                    |");
             Console.WriteLine("+--------------------+");
             Console.Write("\nEnter Selection: ");
-            int sel = int.Parse(Console.ReadLine());
 
-            switch (sel)
+            try
             {
-                case 1:
+                int sel = int.Parse(Console.ReadLine());
+
+                switch (sel)
+                {
+                    case 1:
                     //AdminLogin()
                     //break;
-                case 2:
-                    Console.Clear();
-                    Main();
-                    break;
-                case 3:
-                    return 0;
-                default:
-                    Console.WriteLine("Invalid input, press enter to try again");
-                    Console.ReadLine();
-                    DisplayAdminMenu();
-                    break;
+                    case 2:
+                        Main();
+                        break;
+                    case 3:
+                        return 0;
+                    default:
+                        throw new FormatException();
+                }
             }
-
+            catch (FormatException e)
+            {
+                Console.WriteLine("\nInvalid input, press [ENTER] to try again");
+                Console.ReadLine();
+                DisplayAdminMenu();
+            }
             return 0;
         }
         
@@ -106,29 +117,34 @@ namespace BankAccountPrototype
             Console.WriteLine("|                    |");
             Console.WriteLine("+--------------------+");
             Console.Write("\nEnter Selection: ");
-            int sel = int.Parse(Console.ReadLine());
 
-            switch (sel)
+            try
             {
-                case 1:
-                    CustomerLogin();
-                    break;
-                case 2:
-                    CreateCustomer();
-                    break;
-                case 3:
-                    Console.Clear();
-                    Main();
-                    break;
-                case 4:
-                    return 0;
-                default:
-                    Console.WriteLine("Invalid input, press enter to try again");
-                    Console.ReadLine();
-                    DisplayCustomerMenu();
-                    break;
-            }
+                int sel = int.Parse(Console.ReadLine());
 
+                switch (sel)
+                {
+                    case 1:
+                        CustomerLogin();
+                        break;
+                    case 2:
+                        CreateCustomer();
+                        break;
+                    case 3:
+                        Main();
+                        break;
+                    case 4:
+                        return 0;
+                    default:
+                        throw new FormatException();
+                }
+            }
+            catch (FormatException e)
+            {
+                Console.WriteLine("\nInvalid input, press [ENTER] to try again");
+                Console.ReadLine();
+                DisplayCustomerMenu();
+            }
             return 0;
         }
 
@@ -137,7 +153,7 @@ namespace BankAccountPrototype
         /// then is redirected to their respective account 
         /// menu
         /// </summary>
-        public static void CreateCustomer()
+        private static void CreateCustomer()
         {
             using (var db = new CustomerContext())
             {
@@ -149,42 +165,51 @@ namespace BankAccountPrototype
                     Console.WriteLine("+--------------------------+");
                     Console.WriteLine("|   NEW CUSTOMER ACCOUNT   |");
                     Console.WriteLine("+--------------------------+");
+                    Console.WriteLine("|1.) Back                  |");
+                    Console.WriteLine("+--------------------------+");
                     Console.WriteLine("|                          |");
 
                     Console.Write("|First Name: ");
                     string firstName = Console.ReadLine().Trim().ToUpper();
+                    if (firstName == "1") DisplayCustomerMenu(); // BACK
 
                     Console.Write("|Last Name: ");
                     string lastName = Console.ReadLine().Trim().ToUpper();
+                    if (lastName == "1") DisplayCustomerMenu(); // BACK
 
-                    Console.Write("|Birthdate(8/4/1995): ");
+                    Console.Write("|Birthdate(mm/dd/yyyy): ");
                     DateTime birthDate = DateTime.Parse(Console.ReadLine());
 
                     Console.Write("|New Username: ");
                     var username = Console.ReadLine().Trim().ToLower();
+                    if (username == "1") DisplayCustomerMenu(); // BACK
 
                     // Hide passwords for security
                     Console.Write("|New Password: ");
                     Console.ForegroundColor = ConsoleColor.Black;
-                    var password = Console.ReadLine();
+                    var password = Console.ReadLine(); // save password
                     Console.ForegroundColor = ConsoleColor.Gray;
+                    if (password == "1") DisplayCustomerMenu(); // BACK
 
                     Console.Write("|Re-enter Password: ");
                     Console.ForegroundColor = ConsoleColor.Black;
-                    var samePass = Console.ReadLine();
+                    var samePass = Console.ReadLine(); // save same password
                     Console.ForegroundColor = ConsoleColor.Gray;
+                    if (password == "1") DisplayCustomerMenu(); // BACK
 
                     // Password validation
                     while (password != samePass)
                     {
-                        Console.WriteLine("Passwords do not match, try again.");
-                        Console.Write("|Re-enter Password:   |");
+                        Console.WriteLine("Passwords do not match.");
+                        Console.Write("|Re-enter Password: ");
+                        Console.ForegroundColor = ConsoleColor.Black;
                         samePass = Console.ReadLine();
+                        Console.ForegroundColor = ConsoleColor.Gray;
                     }
 
                     Console.WriteLine("|                          |");
                     Console.WriteLine("+--------------------------+");
-                    Console.WriteLine("\n\nPlease Wait, Saving Changes...");
+                    Console.WriteLine("\nPlease Wait, Saving Changes...");
 
                     // Save information as new Customer
                     var customer = new Customer
@@ -208,26 +233,25 @@ namespace BankAccountPrototype
                     db.SaveChanges();
 
                     // Navigate user to Login Page
-                    Console.WriteLine("Changes saved! REDIRECTING you to Login Page...");
-                    Thread.Sleep(2500);
+                    Console.WriteLine("\nChanges saved! Press [ENTER] to navigate to Customer Login.");
+                    Console.ReadLine();
                     CustomerLogin();
                 }
                 catch(ArgumentNullException)
                 {
-                    Console.WriteLine("Cannot enter null value. Press enter to try again");
+                    Console.WriteLine("\nCannot enter null value. Press [ENTER] to try again");
                     Console.ReadLine();
                     CreateCustomer();
                 }
                 catch (FormatException)
                 {
-                    Console.WriteLine("Invalid format entered. PRess enter to try again");
+                    Console.WriteLine("\nInvalid input, press [ENTER] to try again");
                     Console.ReadLine();
                     CreateCustomer();
                 }
                 catch(Exception e)
                 {
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine("Press enter to try again.");
+                    Console.WriteLine("\nInvalid input, press [ENTER] to try again");
                     Console.ReadLine();
                     CreateCustomer();
                 }
@@ -236,56 +260,154 @@ namespace BankAccountPrototype
         }
 
         /// <summary>
+        /// Finishing creating customer account and save changes
+        /// as well as add the initial deposit transaction to 
+        /// their transaction history
+        /// </summary>
+        private static void CreateAccount(int customerId)
+        {
+            using (var db = new CustomerContext())
+            {
+                Customer cust = db.Customers.Find(customerId);
+
+                var custId = cust.CustomerId;
+                var acc = cust.Account;
+
+                try
+                {
+                    // Create Account for Customer
+                    Console.Clear();
+                    Console.WriteLine("\n        Federal Bank");
+                    Console.WriteLine("+--------------------------+");
+                    Console.WriteLine("|   NEW CUSTOMER ACCOUNT   |");
+                    Console.WriteLine("+--------------------------+");
+                    Console.WriteLine("|                          |");
+
+                    Console.Write("|Account Type(Checkings): ");
+                    string type = Console.ReadLine().Trim().ToUpper();
+
+                    Console.Write("|Initial Account Deposit: $");
+                    decimal amount = decimal.Parse(Console.ReadLine());
+                    string tranType = "Deposit"; // Setting type
+                    
+
+                    Console.WriteLine("|                           |");
+                    Console.WriteLine("+---------------------------+");
+
+                    Console.WriteLine("\nPlease wait, saving changes...");
+
+                    // Save changes to account if account type is null
+                    if (cust.Account.AccountType == null)
+                    {
+                        cust.Account.AccountType = type;
+                        db.SaveChanges();
+                    }
+
+                    // Save changes by calling MakeTransaction
+                    MakeTransaction(custId, amount, tranType);
+
+                    // Navigate to AccountMenu()
+                    Console.WriteLine("Changes have been saved successfully!");
+                    Console.WriteLine("\nPress [ENTER] to navigate to Account Menu");
+                    Console.ReadLine();
+                    DisplayAccountMenu(custId);
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    Console.WriteLine("\nInvalid input, press [ENTER] to try again.");
+                    Console.ReadLine();
+                    CreateAccount(custId);
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("\nInvalid input, press [ENTER] to try again.");
+                    Console.ReadLine();
+                    CreateAccount(custId);
+                }
+            }
+            
+        }
+
+        /// <summary>
         /// User logs in with username and password then
         /// is redirected to AccountMenu()
         /// </summary>
         private static void CustomerLogin()
         {
-            Console.Clear();
-            Console.WriteLine("\n        Federal Bank");
-            Console.WriteLine("+--------------------------+");
-            Console.WriteLine("|      CUSTOMER LOGIN      |");
-            Console.WriteLine("+--------------------------+");
-            Console.Write("|Username: ");
-            var username = Console.ReadLine().Trim().ToLower();
-            Console.Write("|Password: ");
-            Console.ForegroundColor = ConsoleColor.Black;
-            var password = Console.ReadLine();
-            Console.ForegroundColor = ConsoleColor.Gray;
-
-            using (var db = new CustomerContext())
+            try
             {
-                Customer cust = (from c in db.Customers
-                                 where c.Username.Equals(username)
-                                 select c).FirstOrDefault();
+                Console.Clear();
+                Console.WriteLine("\n        Federal Bank");
+                Console.WriteLine("+--------------------------+");
+                Console.WriteLine("|      CUSTOMER LOGIN      |");
+                Console.WriteLine("+--------------------------+");
+                Console.WriteLine("|1.) Back                  |");
+                Console.WriteLine("|--------------------------|");
+                Console.Write("|Username: ");
+                var username = Console.ReadLine().ToString().Trim().ToLower();
 
-                var custId = cust.CustomerId;
+                if (username == "1")
+                {
+                    DisplayCustomerMenu(); // Allow user to return to previous screen
+                }
 
-                if (cust == null)
+                Console.Write("|Password: ");
+                Console.ForegroundColor = ConsoleColor.Black;
+                var password = Console.ReadLine();
+                Console.ForegroundColor = ConsoleColor.Gray;
+
+                if (password == "1")
                 {
-                    Console.WriteLine("\nInvalid username, press enter to try again");
-                    Console.ReadLine();
-                    CustomerLogin();
+                    DisplayCustomerMenu(); // Allow user to return to previous screen
                 }
-                else if (!cust.Password.Equals(password))
+
+                Console.WriteLine("\nPlease Wait...");
+                using (var db = new CustomerContext())
                 {
-                    Console.WriteLine("\nInvalid password, press enter to try again");
-                    Console.ReadLine();
-                    CustomerLogin();
-                }
-                else
-                {
-                    Console.WriteLine("\nYou have successfully logged in!");
-                    Console.WriteLine("\n(*Press enter to navigate to your account*)");
-                    Console.ReadLine();
-                    DisplayAccountMenu(custId);
+                    // Reach in database to find user matching username
+                    Customer cust = (from c in db.Customers
+                                     where c.Username.Equals(username)
+                                     select c).FirstOrDefault();
+
+                    var custId = cust.CustomerId;
+
+                    if (cust == null)
+                    {
+                        Console.WriteLine("\nInvalid username, press [ENTER] to try again");
+                        Console.ReadLine();
+                        CustomerLogin();
+                    }
+                    else if (!cust.Password.Equals(password))
+                    {
+                        Console.WriteLine("\nInvalid password, press [ENTER] to try again");
+                        Console.ReadLine();
+                        CustomerLogin();
+                    }
+                    else
+                    {
+                        Console.WriteLine("You have successfully logged in!");
+                        Console.WriteLine("\nPress [ENTER] to navigate to your account.");
+                        Console.ReadLine();
+                        DisplayAccountMenu(custId);
+                    }
                 }
             }
-
-
+            catch (FormatException e)
+            {
+                Console.WriteLine("\nInvalid menu option, press [ENTER] to try again.");
+                Console.ReadLine();
+                CustomerLogin();
+            }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine("\nInvalid username, press [ENTER] to try again");
+                Console.ReadLine();
+                CustomerLogin();
+            }
+            
         }
-        
-        public static int DisplayAccountMenu(int customerId)
+
+        private static int DisplayAccountMenu(int customerId)
         {
             using (var db = new CustomerContext())
             {
@@ -300,7 +422,6 @@ namespace BankAccountPrototype
                 {
                     CreateAccount(custId);
                 }
-                else { };
 
                 Console.Clear();
                 Console.WriteLine("\n        Federal Bank");
@@ -308,118 +429,69 @@ namespace BankAccountPrototype
                 Console.WriteLine("|    Welcome {0}! ", cust.Username);
                 Console.WriteLine("+--------------------------+");
                 Console.WriteLine("|                          |");
-                Console.WriteLine("|1.) Display Account       |");
+                Console.WriteLine("|1.) Display Account Info  |");
                 Console.WriteLine("|2.) Account Balance       |");
                 Console.WriteLine("|3.) Deposit               |");
                 Console.WriteLine("|4.) Withdraw              |");
                 Console.WriteLine("|5.) Transaction History   |");
-                Console.WriteLine("|6.) Logout                |");
+                Console.WriteLine("|6.) Account Settings      |");
+                Console.WriteLine("|7.) Logout                |");
                 Console.WriteLine("|                          |");
                 Console.WriteLine("+--------------------------+");
                 Console.WriteLine("\nWhat would you like to do?");
                 Console.Write("Enter selection: ");
-                int sel = int.Parse(Console.ReadLine());
-
-                switch (sel)
-                {
-                    case 1: DisplayAccountInfo(custId);
-                        break;
-                    case 2: //AccountBalance()
-                        break;
-                    case 3: //Deposit()
-                        break;
-                    case 4: //Withdraw()
-                        break;
-                    case 5: //TransactionHistory()
-                        break;
-                    case 6:
-                        Console.WriteLine("Logout successful. Taking you to Federal Bank Home.");
-                        Thread.Sleep(3000);
-                        Console.Clear();
-                        Main();
-                        break;
-                }
-            }
-            return 0;
-            
-        }
-
-        /// <summary>
-        /// Finishing creating customer account and save changes
-        /// as well as add the initial deposit transaction to 
-        /// their transaction history
-        /// </summary>
-        public static void CreateAccount(int customerId)
-        {
-            using (var db = new CustomerContext())
-            {
-                Customer cust = db.Customers.Find(customerId);
-                
-                var custId = cust.CustomerId;
-                var acc = cust.Account;
 
                 try
                 {
-                    // Create Account for Customer
-                    Console.Clear();
-                    Console.WriteLine("\n        Federal Bank");
-                    Console.WriteLine("+--------------------------+");
-                    Console.WriteLine("|   NEW CUSTOMER ACCOUNT   |");
-                    Console.WriteLine("+--------------------------+");
-                    Console.WriteLine("|                          |");
+                    int sel = int.Parse(Console.ReadLine());
 
-                    Console.Write("|Account Type(checkings): ");
-                    string type = Console.ReadLine().Trim().ToUpper();
-
-                    Console.Write("|Initial Account Deposit: $");
-                    decimal amount = decimal.Parse(Console.ReadLine());
-                    string tranType = "Deposit";
-
-                    Console.WriteLine("|                           |");
-                    Console.WriteLine("+---------------------------+\n");
-
-                    Console.WriteLine("Please wait, saving changes...\n");
-
-                    // Save changes to account if account type is null
-                    if (cust.Account.AccountType == null)
+                    switch (sel)
                     {
-                        cust.Account.AccountType = type;
-                        db.SaveChanges();
+                        case 1: DisplayAccountInfo(custId);
+                            break;
+                        case 2: DisplayAccountBalance(custId);
+                            break;
+                        case 3: Deposit(custId);
+                            break;
+                        case 4: //Withdraw()
+                            break;
+                        case 5: DisplayTransactionHistory(custId);
+                            break;
+                        case 6:
+                            // DisplayAccountSettings()
+                            break;
+                        case 7:
+                            Console.WriteLine("\nLogout successful. REDIRECTING you to Federal Bank Home...");
+                            Thread.Sleep(3000);
+                            Main();
+                            break;
+                        default:
+                            throw new FormatException();
                     }
-
-                    // Save changes by calling MakeTransaction
-                    MakeTransaction(custId, amount, tranType);
-
-                    // Navigate to AccountMenu()
-                    Console.WriteLine("Changes have been saved successfully!");
-                    Console.WriteLine("(*Press ENTER to navigate to account menu*)");
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("\nInvalid menu option, press [ENTER] to try again.");
                     Console.ReadLine();
                     DisplayAccountMenu(custId);
                 }
-                catch (ArgumentOutOfRangeException e)
-                {
-                    Console.WriteLine("Invalid input, press enter to try again.");
-                    Console.ReadLine();
-                    CreateAccount(custId);
-                }
-                
             }
-
-            // Add event to be raised for transaction
+            return 0;
         }
 
-        public static void DisplayAccountInfo(int customerId)
+        private static void DisplayAccountInfo(int customerId)
         {
             using (var db = new CustomerContext())
             {
                 var cust = db.Customers.Find(customerId); // Find customer from database
+                var custId = cust.CustomerId;
 
                 try
                 {
                     Console.Clear();
                     Console.WriteLine("\n        Federal Bank");
                     Console.WriteLine("+--------------------------+");
-                    Console.WriteLine("|    {0}'s Account", cust.Username);
+                    Console.WriteLine("|    Account Information   |");
                     Console.WriteLine("+--------------------------+");
                     Console.WriteLine("|                          |");
                     Console.WriteLine("|Account ID: {0}", cust.Account.AccountId);
@@ -438,41 +510,33 @@ namespace BankAccountPrototype
 
                     if (sel == 1)
                     {
-                        DisplayAccountMenu(cust.CustomerId);
+                        DisplayAccountMenu(custId);
                     }
                     else
                     {
-                        Console.WriteLine("Invalid input, press enter to try again.");
-                        Console.ReadLine();
-                        DisplayAccountInfo(cust.CustomerId);
+                        throw new FormatException();
                     }
                 }
-                catch (ArgumentNullException)
+                catch (FormatException)
                 {
-                    Console.WriteLine("Cannot enter null value. Press enter to try again.");
+                    Console.WriteLine("\nInvalid input, press [ENTER] to try again.");
                     Console.ReadLine();
-                    DisplayAccountInfo(cust.CustomerId);
-                }
-                catch (FormatException e)
-                {
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine("Press enter to try again.");
-                    Console.ReadLine();
-                    DisplayAccountInfo(cust.CustomerId);
+                    DisplayAccountInfo(custId);
                 }
             }
         }
 
-        public static void DisplayAccountBalance(int customerId)
+        private static void DisplayAccountBalance(int customerId)
         {
             using (var db = new CustomerContext())
             {
-                var cust = db.Customers.Find(customerId);
+                var cust = db.Customers.Find(customerId); // Find customer in database
+                var custId = cust.CustomerId;
 
                 Console.Clear();
                 Console.WriteLine("\n        Federal Bank");
                 Console.WriteLine("+--------------------------+");
-                Console.WriteLine("|  {0}'s Account Balance", cust.Username);
+                Console.WriteLine("|      Account Balance     |");
                 Console.WriteLine("+--------------------------+");
                 Console.WriteLine("|                          |");
                 Console.WriteLine("|Account ID: {0}", cust.Account.AccountId);
@@ -486,37 +550,164 @@ namespace BankAccountPrototype
                 Console.WriteLine("+--------------------------+");
                 Console.WriteLine("\nWhat would you like to do?");
                 Console.Write("Enter selection: ");
-                int sel = int.Parse(Console.ReadLine());
+
+                try
+                {
+                    int sel = int.Parse(Console.ReadLine());
+
+                    switch (sel)
+                    {
+                        case 1: DisplayAccountMenu(custId);
+                            break;
+                        case 2: DisplayTransactionHistory(custId);
+                            break;
+                        default:
+                            throw new FormatException();
+                    }
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("\nInvalid input, press [ENTER] to try again.");
+                    Console.ReadLine();
+                    DisplayAccountBalance(custId);
+                }
             }
         }
 
-        public static void MakeTransaction(int custId, decimal amount, string tranType)
+        private static void Deposit(int customerId)
         {
             using (var db = new CustomerContext())
             {
-                var cust = db.Customers.Find(custId); // Finds customer
-
+                var cust = db.Customers.Find(customerId);
+                var custId = cust.CustomerId;
                 var bal = cust.Account.AccountBalance;
 
-                // If account balance is not 0, we may add to it
-                // else, initialize it
-                if (bal != 0)
-                {
-                    bal += amount;
-                    db.SaveChanges();
-                }
-                else if (bal == 0)
-                {
-                    bal = amount;
-                    db.SaveChanges();
-                }
+                string type = "Deposit"; // Transaction Type
 
-                // Creating a new transaction
+                try
+                {
+                    Console.Clear();
+                    Console.WriteLine("\n        Federal Bank");
+                    Console.WriteLine("+--------------------------+");
+                    Console.WriteLine("|       DEPOSIT MENU       |");
+                    Console.WriteLine("+--------------------------+");
+                    Console.WriteLine("|1.) Back                  |");
+                    Console.WriteLine("+--------------------------+");
+                    Console.WriteLine("|                          |");
+
+                    Console.Write("|Enter amount to deposit: $");
+                    decimal amount = decimal.Parse(Console.ReadLine()); // Transaction Amount
+                    Console.WriteLine("|                          |");
+                    Console.WriteLine("+--------------------------+");
+
+                    if (amount == 1)
+                    {
+                        DisplayAccountMenu(custId);
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nPlease Wait, Saving Changes...");
+                    }
+
+                    MakeTransaction(custId, amount, type);
+
+                    Console.WriteLine("Changes have been saved successfully!");
+                    Console.Write("\nPress [ENTER] to return to Account Menu.");
+                    Console.ReadLine();
+                    DisplayAccountMenu(custId);
+
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("\nInvalid input, press [ENTER] to try again.");
+                    Console.ReadLine();
+                    Deposit(custId);
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    Console.WriteLine("\nInvalid input, press [ENTER] to try again.");
+                    Console.ReadLine();
+                    Deposit(custId);
+                }
+                
+            }
+
+            
+        } 
+
+        private static void DisplayTransactionHistory(int customerId)
+        {
+            using (var db = new CustomerContext())
+            {
+                var cust = db.Customers.Find(customerId); // Find customer in Customer table
+                var custId = cust.CustomerId;
+
+                var transactions = cust.Account.Transactions; // Easily readable variable
+                int j = 1;
+
+                Console.Clear();
+                Console.WriteLine("\n        Federal Bank");
+                Console.WriteLine("+--------------------------+");
+                Console.WriteLine("|       Transactions       |");
+                Console.WriteLine("+--------------------------+");
+                Console.WriteLine("|                          |");
+                Console.WriteLine("|  # of Transactions: {0}    |", cust.Account.Transactions.Count());
+                Console.WriteLine("|--------------------------|");
+                foreach (var item in transactions)
+                {
+                    Console.WriteLine("|*Transaction {0}:\n   (Type: {1}, Amount: {2}, Date: {3})",
+                                        j, item.TransactionType, item.Amount, item.Date);
+                    j++;
+                }
+                Console.WriteLine("|                          |");
+                Console.WriteLine("|--------------------------|");
+                Console.WriteLine("|1.) Back                  |");
+                Console.WriteLine("+--------------------------+");
+                Console.WriteLine("\nWhat would you like to do?");
+                Console.Write("Enter selection: ");
+                try
+                {
+                    int sel = int.Parse(Console.ReadLine());
+                    if (sel == 1)
+                    {
+                        DisplayAccountMenu(cust.CustomerId);
+                    }
+                    else
+                    {
+                        throw new FormatException();
+                    }
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("\nInvalid input, press [ENTER] to try again.");
+                    Console.ReadLine();
+                    DisplayTransactionHistory(custId);
+                }
+            }
+        }
+
+        private static void MakeTransaction(int customerId, decimal amount, string tranType)
+        {
+            using (var db = new CustomerContext())
+            {
+                var cust = db.Customers.Find(customerId); // Finds customer
+                var custId = cust.CustomerId;
+
+                // Get current balance
+                Account currentBal = (from a in db.Accounts
+                                      where a.AccountId.Equals(custId)
+                                      select a).FirstOrDefault();
+
+                currentBal.AccountBalance += amount;
+                db.SaveChanges();
+
+                // Create a new transaction
                 var trans = new Transaction
                 {
                     Account = cust.Account,
                     TransactionType = tranType,
-                    Amount = amount
+                    Amount = amount,
+                    Date = DateTime.Now
                 };
 
                 // Save transaction
