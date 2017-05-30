@@ -11,15 +11,10 @@ using System.Runtime.Remoting.Contexts;
 namespace BankAccountPrototype
 {
     // TODO: Implement functioning event to process transactions made
-    public delegate void ProcessTransactionEventHandler(ProcessTransactionEventArgs e);
+    public delegate void ProcessTransactionEventHandler(int custId, decimal amount, string tranType);
 
     class Program
     {
-        public event ProcessTransactionEventHandler ProcessTransaction;
-
-        ProcessTransactionEventHandler transactionDel =
-        new ProcessTransactionEventHandler(MakeTransaction);
-
         static int Main()
         {
             Console.WriteLine("\n     Federal Bank");
@@ -137,6 +132,11 @@ namespace BankAccountPrototype
             return 0;
         }
 
+        /// <summary>
+        /// User creates initial customer account
+        /// then is redirected to their respective account 
+        /// menu
+        /// </summary>
         public static void CreateCustomer()
         {
             using (var db = new CustomerContext())
@@ -295,6 +295,7 @@ namespace BankAccountPrototype
                 int custId = cust.CustomerId;
                 string accountType = cust.Account.AccountType;
 
+                // If user is a first time user, must CreateAccount
                 if (accountType == null)
                 {
                     CreateAccount(custId);
@@ -372,7 +373,7 @@ namespace BankAccountPrototype
 
                     Console.Write("|Initial Account Deposit: $");
                     decimal amount = decimal.Parse(Console.ReadLine());
-                    string transType = "Deposit";
+                    string tranType = "Deposit";
 
                     Console.WriteLine("|                           |");
                     Console.WriteLine("+---------------------------+\n");
@@ -386,25 +387,8 @@ namespace BankAccountPrototype
                         db.SaveChanges();
                     }
 
-                    // Save changes to account if account balance is 0
-                    if (cust.Account.AccountBalance == 0)
-                    {
-                        cust.Account.AccountBalance = amount;
-                        db.SaveChanges();
-                    }
-
-                    // Create new Transaction named initial
-                    var initial = new Transaction
-                    {
-                        Account = cust.Account,
-                        TransactionType = transType,
-                        Amount = amount
-                    };
-
-                    // Add changes to Transactions collection and Transactions table
-                    cust.Account.Transactions.Add(initial);
-                    db.Transactions.Add(initial);
-                    db.SaveChanges();
+                    // Save changes by calling MakeTransaction
+                    MakeTransaction(custId, amount, tranType);
 
                     // Navigate to AccountMenu()
                     Console.WriteLine("Changes have been saved successfully!");
@@ -428,14 +412,14 @@ namespace BankAccountPrototype
         {
             using (var db = new CustomerContext())
             {
-                var cust = db.Customers.Find(customerId); // Gets user from database
+                var cust = db.Customers.Find(customerId); // Find customer from database
 
                 try
                 {
                     Console.Clear();
                     Console.WriteLine("\n        Federal Bank");
                     Console.WriteLine("+--------------------------+");
-                    Console.WriteLine("|    Welcome {0}! ", cust.Username);
+                    Console.WriteLine("|    {0}'s Account", cust.Username);
                     Console.WriteLine("+--------------------------+");
                     Console.WriteLine("|                          |");
                     Console.WriteLine("|Account ID: {0}", cust.Account.AccountId);
@@ -451,6 +435,7 @@ namespace BankAccountPrototype
                     Console.WriteLine("\nWhat would you like to do?");
                     Console.Write("Enter selection: ");
                     int sel = int.Parse(Console.ReadLine());
+
                     if (sel == 1)
                     {
                         DisplayAccountMenu(cust.CustomerId);
@@ -478,14 +463,67 @@ namespace BankAccountPrototype
             }
         }
 
-        public static void MakeTransaction(ProcessTransactionEventArgs e)
+        public static void DisplayAccountBalance(int customerId)
         {
-            throw new NotImplementedException();
+            using (var db = new CustomerContext())
+            {
+                var cust = db.Customers.Find(customerId);
+
+                Console.Clear();
+                Console.WriteLine("\n        Federal Bank");
+                Console.WriteLine("+--------------------------+");
+                Console.WriteLine("|  {0}'s Account Balance", cust.Username);
+                Console.WriteLine("+--------------------------+");
+                Console.WriteLine("|                          |");
+                Console.WriteLine("|Account ID: {0}", cust.Account.AccountId);
+                Console.WriteLine("|Account Type: {0}", cust.Account.AccountType);
+                Console.WriteLine("|Account Balance: {0}", cust.Account.AccountBalance);
+                Console.WriteLine("|# of Transactions: {0}", cust.Account.Transactions.Count());
+                Console.WriteLine("|                          |");
+                Console.WriteLine("+--------------------------+");
+                Console.WriteLine("|1.) Back                  |");
+                Console.WriteLine("|2.) Transaction History   |");
+                Console.WriteLine("+--------------------------+");
+                Console.WriteLine("\nWhat would you like to do?");
+                Console.Write("Enter selection: ");
+                int sel = int.Parse(Console.ReadLine());
+            }
         }
 
-        public static void OnProcessTransaction(ProcessTransactionEventArgs e)
+        public static void MakeTransaction(int custId, decimal amount, string tranType)
         {
-            throw new NotImplementedException();
+            using (var db = new CustomerContext())
+            {
+                var cust = db.Customers.Find(custId); // Finds customer
+
+                var bal = cust.Account.AccountBalance;
+
+                // If account balance is not 0, we may add to it
+                // else, initialize it
+                if (bal != 0)
+                {
+                    bal += amount;
+                    db.SaveChanges();
+                }
+                else if (bal == 0)
+                {
+                    bal = amount;
+                    db.SaveChanges();
+                }
+
+                // Creating a new transaction
+                var trans = new Transaction
+                {
+                    Account = cust.Account,
+                    TransactionType = tranType,
+                    Amount = amount
+                };
+
+                // Save transaction
+                cust.Account.Transactions.Add(trans);
+                db.Transactions.Add(trans);
+                db.SaveChanges();
+            }
         }
     }
 }
