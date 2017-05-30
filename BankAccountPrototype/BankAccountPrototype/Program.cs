@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -51,7 +51,7 @@ namespace BankAccountPrototype
             return 0;
         }
 
-        
+        // TODO: Implement full functionality
         private static int AdminMenu()
         {
             Console.Clear();
@@ -264,10 +264,10 @@ namespace BankAccountPrototype
                 Console.Clear();
                 Console.WriteLine("\n        Federal Bank");
                 Console.WriteLine("+--------------------------+");
-                Console.WriteLine($"|    Welcome {username}!   ");
+                Console.WriteLine($"|    Welcome {username}");
                 Console.WriteLine("+--------------------------+");
                 Console.WriteLine("|                          |");
-                Console.WriteLine("|1.) Account Info          |");
+                Console.WriteLine("|1.) Display Account       |");
                 Console.WriteLine("|2.) Account Balance       |");
                 Console.WriteLine("|3.) Deposit               |");
                 Console.WriteLine("|4.) Withdraw              |");
@@ -281,7 +281,7 @@ namespace BankAccountPrototype
 
                 switch (sel)
                 {
-                    case 1: //AccountInfo()
+                    case 1: DisplayAccountInfo(custId);
                         break;
                     case 2: //AccountBalance()
                         break;
@@ -296,6 +296,7 @@ namespace BankAccountPrototype
                         db.Dispose();
                         Console.WriteLine("Logout successful. Taking you to Federal Bank Home.");
                         Thread.Sleep(3000);
+                        Console.Clear();
                         Main();
                         break;
                 }
@@ -312,7 +313,6 @@ namespace BankAccountPrototype
                 
                 var custId = cust.CustomerId;
                 var acc = cust.Account;
-                
 
                 // Create Account for Customer
                 Console.Clear();
@@ -327,8 +327,7 @@ namespace BankAccountPrototype
 
                 Console.Write("|Initial Account Deposit: $");
                 decimal amount = decimal.Parse(Console.ReadLine());
-                string transType = Console.ReadLine().Trim().ToUpper();
-
+                string transType = "Deposit";
 
                 Console.WriteLine("|                           |");
                 Console.WriteLine("+---------------------------+\n");
@@ -365,9 +364,46 @@ namespace BankAccountPrototype
                 AccountMenu(custId);
             }
 
-            // EVENTS DELEGATES
+            // Add event to be raised for transaction
             
-            
+        }
+
+        public static void DisplayAccountInfo(int customerId)
+        {
+            using (var db = new CustomerContext())
+            {
+                var cust = db.Customers.Find(customerId);
+
+                Console.Clear();
+                Console.WriteLine("\n        Federal Bank");
+                Console.WriteLine("+--------------------------+");
+                Console.WriteLine("|    Welcome {0}! ", cust.Username);
+                Console.WriteLine("+--------------------------+");
+                Console.WriteLine("|                          |");
+                Console.WriteLine("|Account ID: {0}", cust.Account.AccountId);
+                Console.WriteLine("|Account Type: {0}", cust.Account.AccountType);
+                Console.WriteLine("|First Name: {0}", cust.FirstName);
+                Console.WriteLine("|Last Name: {0}", cust.LastName);
+                Console.WriteLine("|Birth Date: {0}", cust.BirthDate);
+                Console.WriteLine("|# of Transactions: {0}", cust.Account.Transactions.Count());
+                Console.WriteLine("+--------------------------+");
+                Console.WriteLine("|1.) Back                  |");
+                Console.WriteLine("|                          |");
+                Console.WriteLine("+--------------------------+");
+                Console.WriteLine("\n\nWhat would you like to do?");
+                Console.Write("Enter selection: ");
+                int sel = int.Parse(Console.ReadLine());
+                if (sel == 1)
+                {
+                    AccountMenu(cust.CustomerId);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input, press enter to try again.");
+                    Console.ReadLine();
+                    DisplayAccountInfo(cust.CustomerId);
+                }
+            }
         }
 
         public static void MakeTransaction(ProcessTransactionEventArgs e)
@@ -377,7 +413,7 @@ namespace BankAccountPrototype
 
         public static void OnProcessTransaction(ProcessTransactionEventArgs e)
         {
-            
+            throw new NotImplementedException();
         }
     }
 }
