@@ -12,7 +12,7 @@ namespace BankAccountPrototype
     {
         public Account()
         {
-            Transactions = new List<Transaction>();
+            Transactions = new HashSet<Transaction>();
         }
         public int AccountId { get; set; }
         public decimal AccountBalance { get; set; }
