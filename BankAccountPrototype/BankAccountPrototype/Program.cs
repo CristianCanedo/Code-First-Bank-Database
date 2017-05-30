@@ -10,9 +10,12 @@ using System.Runtime.Remoting.Contexts;
 
 namespace BankAccountPrototype
 {
-    class Program
+    public class Program
     {
         enum MainMenu { Admin = 1, Customer, Exit };
+
+        public static int maxTries = 3;
+        public static int tries = 1;
         static int Main()
         {
             int admin = (int)MainMenu.Admin;
@@ -100,24 +103,118 @@ namespace BankAccountPrototype
                 switch (sel)
                 {
                     case 1:
-                    //AdminLogin()
-                    //break;
+                        if (tries > 3)
+                        {
+                            Console.WriteLine("\nCannot login at this time. Please try again later.");
+                            Console.ReadLine();
+                            DisplayAdminMenu();
+                            break;
+                        }
+                        else
+                        {
+                            AdminLogin();
+                            break;
+                        }
+
                     case 2:
                         Main();
                         break;
+
                     case 3:
                         return 0;
+
                     default:
                         throw new FormatException();
                 }
             }
-            catch (FormatException e)
+            catch (FormatException)
             {
                 Console.WriteLine("\nInvalid input, press [ENTER] to try again");
                 Console.ReadLine();
                 DisplayAdminMenu();
             }
             return 0;
+        }
+
+        private static void AdminLogin()
+        {
+            using (var db = new CustomerContext())
+            {
+                if (tries <= maxTries)
+                {
+                    try
+                    {
+                        Console.Clear();
+                        Console.WriteLine("\n        Federal Bank");
+                        Console.WriteLine("+--------------------------+");
+                        Console.WriteLine("|       ADMIN LOGIN        |");
+                        Console.WriteLine("+--------------------------+");
+                        Console.WriteLine("|1.) Back                  |");
+                        Console.WriteLine("+--------------------------+");
+                        Console.WriteLine("|                          |");
+
+                        Console.Write("|Admin Username: ");
+                        string username = Console.ReadLine().Trim();
+                        if (username == "1") DisplayAdminMenu();
+
+                        Console.Write("|Admin Password: ");
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        string password = Console.ReadLine(); // Hide password
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                        if (username == "1") DisplayAdminMenu();
+
+                        Console.WriteLine("+--------------------------+");
+
+                        Console.WriteLine("\nPlease Wait...");
+
+                        // Find Admin account
+                        Admin admin = (from a in db.Admins
+                                       where a.Username.Equals(username)
+                                       select a).FirstOrDefault();
+
+                        var adminId = admin.AdminId;
+
+                        if (admin == null)
+                        {
+                            Console.WriteLine("\n{0} tries left.", (maxTries - tries));
+                            Console.WriteLine("Invalid username, press [ENTER] to try again");
+                            Console.ReadLine();
+                            tries++;
+                            AdminLogin();
+                        }
+                        else if (!admin.Password.Equals(password))
+                        {
+                            Console.WriteLine("\n{0} tries left.", (maxTries - tries));
+                            Console.WriteLine("\nInvalid password, press [ENTER] to try again");
+                            Console.ReadLine();
+                            tries++;
+                            AdminLogin();
+                        }
+                        else
+                        {
+                            Console.WriteLine("You have successfully logged in!");
+                            Console.WriteLine("\nPress [ENTER] to navigate to Admin Menu.");
+                            Console.ReadLine();
+                            //DisplayAdminMenu(adminId);
+                        }
+                    }
+                    catch (NullReferenceException)
+                    {
+                        Console.WriteLine("\n{0} tries left.", (maxTries - tries));
+                        Console.WriteLine("Invalid input, press [ENTER] to try again");
+                        Console.ReadLine();
+                        tries++;
+                        AdminLogin();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Ran out of tries! Press [ENTER] to return to previous menu.");
+                    Console.ReadLine();
+                    DisplayAdminMenu();
+                }
+
+            }
         }
         
         /// <summary>
@@ -369,20 +466,14 @@ namespace BankAccountPrototype
                 Console.Write("|Username: ");
                 var username = Console.ReadLine().ToString().Trim().ToLower();
 
-                if (username == "1")
-                {
-                    DisplayCustomerMenu(); // Allow user to return to previous screen
-                }
+                if (username == "1") DisplayCustomerMenu(); // Allow user to go back one menu
 
                 Console.Write("|Password: ");
                 Console.ForegroundColor = ConsoleColor.Black;
                 var password = Console.ReadLine();
                 Console.ForegroundColor = ConsoleColor.Gray;
 
-                if (password == "1")
-                {
-                    DisplayCustomerMenu(); // Allow user to return to previous screen
-                }
+                if (password == "1") DisplayCustomerMenu(); // Allow user to go back one menu
 
                 Console.WriteLine("\nPlease Wait...");
                 using (var db = new CustomerContext())
@@ -739,14 +830,14 @@ namespace BankAccountPrototype
                 Console.WriteLine("|--------------------------|");
                 foreach (var item in transactions)
                 {
-                    if (item.TransactionType == "Deposit") // Color transactions green if deposit
+                    if (item.TransactionType == "Deposit")
                     {
                         Console.ForegroundColor = ConsoleColor.DarkGreen;
                         Console.WriteLine("|*Transaction {0}:\n   (Type: {1}, Amount: {2}, Date: {3})",
                                         j, item.TransactionType, item.Amount, item.Date);
                         j++;
                     }
-                    else if (item.TransactionType == "Withdraw") // Color transactions red if withdraw
+                    else if (item.TransactionType == "Withdraw")
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("|*Transaction {0}:\n   (Type: {1}, Amount: {2}, Date: {3})",
