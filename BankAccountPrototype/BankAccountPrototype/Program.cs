@@ -739,10 +739,23 @@ namespace BankAccountPrototype
                 Console.WriteLine("|--------------------------|");
                 foreach (var item in transactions)
                 {
-                    Console.WriteLine("|*Transaction {0}:\n   (Type: {1}, Amount: {2}, Date: {3})",
+                    if (item.TransactionType == "Deposit") // Color transactions green if deposit
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+                        Console.WriteLine("|*Transaction {0}:\n   (Type: {1}, Amount: {2}, Date: {3})",
                                         j, item.TransactionType, item.Amount, item.Date);
-                    j++;
+                        j++;
+                    }
+                    else if (item.TransactionType == "Withdraw") // Color transactions red if withdraw
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("|*Transaction {0}:\n   (Type: {1}, Amount: {2}, Date: {3})",
+                                        j, item.TransactionType, item.Amount, item.Date);
+                        j++;
+                    }
                 }
+                Console.ForegroundColor = ConsoleColor.Gray;
+
                 Console.WriteLine("|                          |");
                 Console.WriteLine("|--------------------------|");
                 Console.WriteLine("|1.) Back                  |");
