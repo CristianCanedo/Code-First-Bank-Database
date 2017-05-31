@@ -1,12 +1,10 @@
 # Code-First-Bank-Database
-Creating and developing bank application logic in console using code first entity framework model.
 
-Customers_tbl has 1:1 relationship with Accounts_tbl.
-Accounts_tbl has 1:many relationship with Transactions_tbl.
 
-Users can create their account and login to then be redirected to their respective Account Menu.
 
-TODO:
-*AccountMenu() selection functionality
-*Implementing proper methods for use with ProcessTransactionEventHandler delegate
+Developing a console application with a database that allows Customers of Federal Bank to create a user account and log in. In their account they can check their Account Information, Account Balance, Deposit, Withdraw, Transaction History, and edit their Account Settings.
 
+In the application Federal Bank administrators may also log in (although with only 3 tries) and list all bank customers, edit customers, or remove customers.
+
+
+To be implemented: Customer Account Settings, Edit Customers, Remove Customers
