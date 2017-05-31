@@ -103,7 +103,7 @@ namespace BankAccountPrototype
                 switch (sel)
                 {
                     case 1:
-                        if (tries > 3)
+                        if (tries > maxTries) // Prevents user from logging in if tries greater than maxTries 
                         {
                             Console.WriteLine("\nCannot login at this time. Please try again later.");
                             Console.ReadLine();
@@ -195,7 +195,7 @@ namespace BankAccountPrototype
                             Console.WriteLine("You have successfully logged in!");
                             Console.WriteLine("\nPress [ENTER] to navigate to Admin Menu.");
                             Console.ReadLine();
-                            //DisplayAdminMenu(adminId);
+                            DisplayAdminAccount(adminId);
                         }
                     }
                     catch (NullReferenceException)
@@ -216,7 +216,63 @@ namespace BankAccountPrototype
 
             }
         }
-        
+
+        private static void DisplayAdminAccount(int administratorId)
+        {
+            using (var db = new CustomerContext())
+            {
+                Admin admin = db.Admins.Find(administratorId); // Finds admin from admin table
+                var adminId = admin.AdminId;
+
+                Console.Clear();
+                Console.WriteLine("\n     Federal Bank");
+                Console.WriteLine("+--------------------+");
+                Console.WriteLine($"|  {admin.Username}  ");
+                Console.WriteLine("+--------------------+");
+                Console.WriteLine("|                    |");
+                Console.WriteLine("|1.) Customers       |");
+                Console.WriteLine("|2.) Remove Customer |");
+                Console.WriteLine("|3.) Edit Customer   |");
+                Console.WriteLine("|4.) Logout          |");
+                Console.WriteLine("|                    |");
+                Console.WriteLine("+--------------------+");
+                Console.Write("\nEnter Selection: ");
+
+                try
+                {
+                    int sel = int.Parse(Console.ReadLine());
+
+                    switch (sel)
+                    {
+                        case 1:
+                            //GetCustomers();
+                            break;
+                        case 2:
+                            //RemoveCustomer();
+                            break;
+                        case 3:
+                            //EditCustomer();
+                            break;
+                        case 4:
+                            Console.WriteLine("\nLogged out successfully! REDIRECING you to Federal Bank Home...");
+                            Thread.Sleep(3000);
+                            Main();
+                            break;
+                        default:
+                            throw new FormatException();
+                    }
+                    
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("\nInvalid input, press [ENTER] to try again.");
+                    Console.ReadLine();
+                    DisplayAdminAccount(adminId);
+                }
+            }
+            
+        }
+
         /// <summary>
         /// Displays customer main menu where user can
         /// navigate to different areas of the program
@@ -259,7 +315,7 @@ namespace BankAccountPrototype
                         throw new FormatException();
                 }
             }
-            catch (FormatException e)
+            catch (FormatException)
             {
                 Console.WriteLine("\nInvalid input, press [ENTER] to try again");
                 Console.ReadLine();
@@ -357,7 +413,7 @@ namespace BankAccountPrototype
                     Console.ReadLine();
                     CustomerLogin();
                 }
-                catch(ArgumentNullException)
+                catch (ArgumentNullException)
                 {
                     Console.WriteLine("\nCannot enter null value. Press [ENTER] to try again");
                     Console.ReadLine();
@@ -369,7 +425,7 @@ namespace BankAccountPrototype
                     Console.ReadLine();
                     CreateCustomer();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Console.WriteLine("\nInvalid input, press [ENTER] to try again");
                     Console.ReadLine();
@@ -409,7 +465,7 @@ namespace BankAccountPrototype
                     Console.Write("|Initial Account Deposit: $");
                     decimal amount = decimal.Parse(Console.ReadLine());
                     string tranType = "Deposit"; // Setting type
-                    
+
 
                     Console.WriteLine("|                           |");
                     Console.WriteLine("+---------------------------+");
@@ -445,7 +501,7 @@ namespace BankAccountPrototype
                     CreateAccount(custId);
                 }
             }
-            
+
         }
 
         /// <summary>
@@ -518,7 +574,7 @@ namespace BankAccountPrototype
                 Console.ReadLine();
                 CustomerLogin();
             }
-            
+
         }
 
         private static int DisplayAccountMenu(int customerId)
@@ -561,15 +617,20 @@ namespace BankAccountPrototype
 
                     switch (sel)
                     {
-                        case 1: DisplayAccountInfo(custId);
+                        case 1:
+                            DisplayAccountInfo(custId);
                             break;
-                        case 2: DisplayAccountBalance(custId);
+                        case 2:
+                            DisplayAccountBalance(custId);
                             break;
-                        case 3: Deposit(custId);
+                        case 3:
+                            Deposit(custId);
                             break;
-                        case 4: Withdraw(custId);
+                        case 4:
+                            Withdraw(custId);
                             break;
-                        case 5: DisplayTransactionHistory(custId);
+                        case 5:
+                            DisplayTransactionHistory(custId);
                             break;
                         case 6:
                             // DisplayAccountSettings()
@@ -671,9 +732,11 @@ namespace BankAccountPrototype
 
                     switch (sel)
                     {
-                        case 1: DisplayAccountMenu(custId);
+                        case 1:
+                            DisplayAccountMenu(custId);
                             break;
-                        case 2: DisplayTransactionHistory(custId);
+                        case 2:
+                            DisplayTransactionHistory(custId);
                             break;
                         default:
                             throw new FormatException();
@@ -743,10 +806,10 @@ namespace BankAccountPrototype
                     Console.ReadLine();
                     Deposit(custId);
                 }
-                
+
             }
 
-            
+
         }
 
         private static void Withdraw(int customerId)
@@ -808,7 +871,7 @@ namespace BankAccountPrototype
             }
 
 
-        } 
+        }
 
         private static void DisplayTransactionHistory(int customerId)
         {
@@ -922,7 +985,7 @@ namespace BankAccountPrototype
                     db.Transactions.Add(withdraw);
                     db.SaveChanges();
                 }
-                
+
             }
         }
     }
