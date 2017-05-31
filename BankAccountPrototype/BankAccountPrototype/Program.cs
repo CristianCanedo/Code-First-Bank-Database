@@ -755,7 +755,7 @@ namespace BankAccountPrototype
         {
             using (var db = new CustomerContext())
             {
-                var cust = db.Customers.Find(customerId);
+                var cust = db.Customers.Find(customerId); // Get customer from customer table
                 var custId = cust.CustomerId;
                 var bal = cust.Account.AccountBalance;
 
@@ -895,22 +895,26 @@ namespace BankAccountPrototype
                 {
                     if (item.TransactionType == "Deposit")
                     {
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                        Console.WriteLine("\n|*Transaction {0}: ", j);
                         Console.ForegroundColor = ConsoleColor.DarkGreen;
-                        Console.WriteLine("|*Transaction {0}:\n   (Type: {1}, Amount: {2}, Date: {3})",
-                                        j, item.TransactionType, item.Amount, item.Date);
+                        Console.Write("   (Type: {0}, Amount: {1}, Date: {2})",
+                                        item.TransactionType, item.Amount, item.Date);
                         j++;
                     }
                     else if (item.TransactionType == "Withdraw")
                     {
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                        Console.WriteLine("\n|*Transaction {0}: ", j);
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("|*Transaction {0}:\n   (Type: {1}, Amount: {2}, Date: {3})",
-                                        j, item.TransactionType, item.Amount, item.Date);
+                        Console.Write("   (Type: {0}, Amount: {1}, Date: {2})",
+                                        item.TransactionType, item.Amount, item.Date);
                         j++;
                     }
                 }
                 Console.ForegroundColor = ConsoleColor.Gray;
 
-                Console.WriteLine("|                          |");
+                Console.WriteLine("\n|                          |");
                 Console.WriteLine("|--------------------------|");
                 Console.WriteLine("|1.) Back                  |");
                 Console.WriteLine("+--------------------------+");
