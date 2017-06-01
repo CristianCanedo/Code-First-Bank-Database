@@ -7,4 +7,4 @@ Developing a console application with a database that allows Customers of Federa
 In the application Federal Bank administrators may also log in (although with only 3 tries) and list all bank customers, edit customers, or remove customers.
 
 
-To be implemented: Customer Account Settings, Edit Customers, Remove Customers
+To be implemented: Customer Account Settings, Edit Customers, Remove Customers, resetting Admin tries after 15 minutes.
