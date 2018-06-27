@@ -28,7 +28,7 @@ namespace BankAccountPrototype
             Console.WriteLine("|     MAIN MENU      |");
             Console.WriteLine("+--------------------+");
             Console.WriteLine("|                    |");
-            Console.WriteLine("|1.) Admin           |");
+            //Console.WriteLine("|1.) Admin           |");
             Console.WriteLine("|2.) Customer        |");
             Console.WriteLine("|3.) Exit            |");
             Console.WriteLine("|                    |");
@@ -42,7 +42,7 @@ namespace BankAccountPrototype
 
                 if (sel == admin)
                 {
-                    DisplayAdminMenu();
+                    //DisplayAdminMenu();
                 }
                 else if (sel == customer)
                 {
@@ -81,197 +81,197 @@ namespace BankAccountPrototype
         /// <summary>
         /// TODO: Complete
         /// </summary>
-        private static int DisplayAdminMenu()
-        {
-            Console.Clear();
-            Console.WriteLine("\n     Federal Bank");
-            Console.WriteLine("+--------------------+");
-            Console.WriteLine("|     ADMIN MENU     |");
-            Console.WriteLine("+--------------------+");
-            Console.WriteLine("|                    |");
-            Console.WriteLine("|1.) Login           |");
-            Console.WriteLine("|2.) Back            |");
-            Console.WriteLine("|3.) Exit            |");
-            Console.WriteLine("|                    |");
-            Console.WriteLine("+--------------------+");
-            Console.Write("\nEnter Selection: ");
+        //private static int DisplayAdminMenu()
+        //{
+        //    Console.Clear();
+        //    Console.WriteLine("\n     Federal Bank");
+        //    Console.WriteLine("+--------------------+");
+        //    Console.WriteLine("|     ADMIN MENU     |");
+        //    Console.WriteLine("+--------------------+");
+        //    Console.WriteLine("|                    |");
+        //    Console.WriteLine("|1.) Login           |");
+        //    Console.WriteLine("|2.) Back            |");
+        //    Console.WriteLine("|3.) Exit            |");
+        //    Console.WriteLine("|                    |");
+        //    Console.WriteLine("+--------------------+");
+        //    Console.Write("\nEnter Selection: ");
 
-            try
-            {
-                int sel = int.Parse(Console.ReadLine());
+        //    try
+        //    {
+        //        int sel = int.Parse(Console.ReadLine());
 
-                switch (sel)
-                {
-                    case 1:
-                        if (tries > maxTries) // Prevents user from logging in if tries greater than maxTries 
-                        {
-                            Console.WriteLine("\nCannot login at this time. Please try again later.");
-                            Console.ReadLine();
-                            DisplayAdminMenu();
-                            break;
-                        }
-                        else
-                        {
-                            AdminLogin();
-                            break;
-                        }
+        //        switch (sel)
+        //        {
+        //            case 1:
+        //                if (tries > maxTries) // Prevents user from logging in if tries greater than maxTries 
+        //                {
+        //                    Console.WriteLine("\nCannot login at this time. Please try again later.");
+        //                    Console.ReadLine();
+        //                    DisplayAdminMenu();
+        //                    break;
+        //                }
+        //                else
+        //                {
+        //                    AdminLogin();
+        //                    break;
+        //                }
 
-                    case 2:
-                        Main();
-                        break;
+        //            case 2:
+        //                Main();
+        //                break;
 
-                    case 3:
-                        return 0;
+        //            case 3:
+        //                return 0;
 
-                    default:
-                        throw new FormatException();
-                }
-            }
-            catch (FormatException)
-            {
-                Console.WriteLine("\nInvalid input, press [ENTER] to try again");
-                Console.ReadLine();
-                DisplayAdminMenu();
-            }
-            return 0;
-        }
+        //            default:
+        //                throw new FormatException();
+        //        }
+        //    }
+        //    catch (FormatException)
+        //    {
+        //        Console.WriteLine("\nInvalid input, press [ENTER] to try again");
+        //        Console.ReadLine();
+        //        DisplayAdminMenu();
+        //    }
+        //    return 0;
+        //}
 
-        private static void AdminLogin()
-        {
-            using (var db = new CustomerContext())
-            {
-                if (tries <= maxTries)
-                {
-                    try
-                    {
-                        Console.Clear();
-                        Console.WriteLine("\n        Federal Bank");
-                        Console.WriteLine("+--------------------------+");
-                        Console.WriteLine("|       ADMIN LOGIN        |");
-                        Console.WriteLine("+--------------------------+");
-                        Console.WriteLine("|1.) Back                  |");
-                        Console.WriteLine("+--------------------------+");
-                        Console.WriteLine("|                          |");
+        //private static void AdminLogin()
+        //{
+        //    using (var db = new CustomerContext())
+        //    {
+        //        if (tries <= maxTries)
+        //        {
+        //            try
+        //            {
+        //                Console.Clear();
+        //                Console.WriteLine("\n        Federal Bank");
+        //                Console.WriteLine("+--------------------------+");
+        //                Console.WriteLine("|       ADMIN LOGIN        |");
+        //                Console.WriteLine("+--------------------------+");
+        //                Console.WriteLine("|1.) Back                  |");
+        //                Console.WriteLine("+--------------------------+");
+        //                Console.WriteLine("|                          |");
 
-                        Console.Write("|Admin Username: ");
-                        string username = Console.ReadLine().Trim();
-                        if (username == "1") DisplayAdminMenu();
+        //                Console.Write("|Admin Username: ");
+        //                string username = Console.ReadLine().Trim();
+        //                if (username == "1") DisplayAdminMenu();
 
-                        Console.Write("|Admin Password: ");
-                        Console.ForegroundColor = ConsoleColor.Black;
-                        string password = Console.ReadLine(); // Hide password
-                        Console.ForegroundColor = ConsoleColor.Gray;
-                        if (username == "1") DisplayAdminMenu();
+        //                Console.Write("|Admin Password: ");
+        //                Console.ForegroundColor = ConsoleColor.Black;
+        //                string password = Console.ReadLine(); // Hide password
+        //                Console.ForegroundColor = ConsoleColor.Gray;
+        //                if (username == "1") DisplayAdminMenu();
 
-                        Console.WriteLine("+--------------------------+");
+        //                Console.WriteLine("+--------------------------+");
 
-                        Console.WriteLine("\nPlease Wait...");
+        //                Console.WriteLine("\nPlease Wait...");
 
-                        // Find Admin account
-                        Admin admin = (from a in db.Admins
-                                       where a.Username.Equals(username)
-                                       select a).FirstOrDefault();
+        //                // Find Admin account
+        //                Admin admin = (from a in db.Admins
+        //                               where a.Username.Equals(username)
+        //                               select a).FirstOrDefault();
 
-                        var adminId = admin.AdminId;
+        //                var adminId = admin.AdminId;
 
-                        if (admin == null)
-                        {
-                            Console.WriteLine("\n{0} tries left.", (maxTries - tries));
-                            Console.WriteLine("Invalid username, press [ENTER] to try again");
-                            Console.ReadLine();
-                            tries++;
-                            AdminLogin();
-                        }
-                        else if (!admin.Password.Equals(password))
-                        {
-                            Console.WriteLine("\n{0} tries left.", (maxTries - tries));
-                            Console.WriteLine("\nInvalid password, press [ENTER] to try again");
-                            Console.ReadLine();
-                            tries++;
-                            AdminLogin();
-                        }
-                        else
-                        {
-                            Console.WriteLine("You have successfully logged in!");
-                            Console.WriteLine("\nPress [ENTER] to navigate to Admin Menu.");
-                            Console.ReadLine();
-                            DisplayAdminAccount(adminId);
-                        }
-                    }
-                    catch (NullReferenceException)
-                    {
-                        Console.WriteLine("\n{0} tries left.", (maxTries - tries));
-                        Console.WriteLine("Invalid input, press [ENTER] to try again");
-                        Console.ReadLine();
-                        tries++;
-                        AdminLogin();
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Ran out of tries! Press [ENTER] to return to previous menu.");
-                    Console.ReadLine();
-                    DisplayAdminMenu();
-                }
+        //                if (admin == null)
+        //                {
+        //                    Console.WriteLine("\n{0} tries left.", (maxTries - tries));
+        //                    Console.WriteLine("Invalid username, press [ENTER] to try again");
+        //                    Console.ReadLine();
+        //                    tries++;
+        //                    AdminLogin();
+        //                }
+        //                else if (!admin.Password.Equals(password))
+        //                {
+        //                    Console.WriteLine("\n{0} tries left.", (maxTries - tries));
+        //                    Console.WriteLine("\nInvalid password, press [ENTER] to try again");
+        //                    Console.ReadLine();
+        //                    tries++;
+        //                    AdminLogin();
+        //                }
+        //                else
+        //                {
+        //                    Console.WriteLine("You have successfully logged in!");
+        //                    Console.WriteLine("\nPress [ENTER] to navigate to Admin Menu.");
+        //                    Console.ReadLine();
+        //                    DisplayAdminAccount(adminId);
+        //                }
+        //            }
+        //            catch (NullReferenceException)
+        //            {
+        //                Console.WriteLine("\n{0} tries left.", (maxTries - tries));
+        //                Console.WriteLine("Invalid input, press [ENTER] to try again");
+        //                Console.ReadLine();
+        //                tries++;
+        //                AdminLogin();
+        //            }
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine("Ran out of tries! Press [ENTER] to return to previous menu.");
+        //            Console.ReadLine();
+        //            DisplayAdminMenu();
+        //        }
 
-            }
-        }
+        //    }
+        //}
 
-        private static void DisplayAdminAccount(int administratorId)
-        {
-            using (var db = new CustomerContext())
-            {
-                Admin admin = db.Admins.Find(administratorId); // Finds admin from admin table
-                var adminId = admin.AdminId;
+        //private static void DisplayAdminAccount(int administratorId)
+        //{
+        //    using (var db = new CustomerContext())
+        //    {
+        //        Admin admin = db.Admins.Find(administratorId); // Finds admin from admin table
+        //        var adminId = admin.AdminId;
 
-                Console.Clear();
-                Console.WriteLine("\n     Federal Bank");
-                Console.WriteLine("+--------------------+");
-                Console.WriteLine($"|  {admin.Username}  ");
-                Console.WriteLine("+--------------------+");
-                Console.WriteLine("|                    |");
-                Console.WriteLine("|1.) Customers       |");
-                Console.WriteLine("|2.) Remove Customer |");
-                Console.WriteLine("|3.) Edit Customer   |");
-                Console.WriteLine("|4.) Logout          |");
-                Console.WriteLine("|                    |");
-                Console.WriteLine("+--------------------+");
-                Console.Write("\nEnter Selection: ");
+        //        Console.Clear();
+        //        Console.WriteLine("\n     Federal Bank");
+        //        Console.WriteLine("+--------------------+");
+        //        Console.WriteLine($"|  {admin.Username}  ");
+        //        Console.WriteLine("+--------------------+");
+        //        Console.WriteLine("|                    |");
+        //        Console.WriteLine("|1.) Customers       |");
+        //        Console.WriteLine("|2.) Remove Customer |");
+        //        Console.WriteLine("|3.) Edit Customer   |");
+        //        Console.WriteLine("|4.) Logout          |");
+        //        Console.WriteLine("|                    |");
+        //        Console.WriteLine("+--------------------+");
+        //        Console.Write("\nEnter Selection: ");
 
-                try
-                {
-                    int sel = int.Parse(Console.ReadLine());
+        //        try
+        //        {
+        //            int sel = int.Parse(Console.ReadLine());
 
-                    switch (sel)
-                    {
-                        case 1:
-                            //GetCustomers();
-                            break;
-                        case 2:
-                            //RemoveCustomer();
-                            break;
-                        case 3:
-                            //EditCustomer();
-                            break;
-                        case 4:
-                            Console.WriteLine("\nLogged out successfully! REDIRECING you to Federal Bank Home...");
-                            Thread.Sleep(3000);
-                            Main();
-                            break;
-                        default:
-                            throw new FormatException();
-                    }
+        //            switch (sel)
+        //            {
+        //                case 1:
+        //                    //GetCustomers();
+        //                    break;
+        //                case 2:
+        //                    //RemoveCustomer();
+        //                    break;
+        //                case 3:
+        //                    //EditCustomer();
+        //                    break;
+        //                case 4:
+        //                    Console.WriteLine("\nLogged out successfully! REDIRECING you to Federal Bank Home...");
+        //                    Thread.Sleep(3000);
+        //                    Main();
+        //                    break;
+        //                default:
+        //                    throw new FormatException();
+        //            }
                     
-                }
-                catch (FormatException)
-                {
-                    Console.WriteLine("\nInvalid input, press [ENTER] to try again.");
-                    Console.ReadLine();
-                    DisplayAdminAccount(adminId);
-                }
-            }
+        //        }
+        //        catch (FormatException)
+        //        {
+        //            Console.WriteLine("\nInvalid input, press [ENTER] to try again.");
+        //            Console.ReadLine();
+        //            DisplayAdminAccount(adminId);
+        //        }
+        //    }
             
-        }
+        //}
 
         /// <summary>
         /// Displays customer main menu where user can
@@ -425,7 +425,7 @@ namespace BankAccountPrototype
                     Console.ReadLine();
                     CreateCustomer();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     Console.WriteLine("\nInvalid input, press [ENTER] to try again");
                     Console.ReadLine();
@@ -562,7 +562,7 @@ namespace BankAccountPrototype
                     }
                 }
             }
-            catch (FormatException e)
+            catch (FormatException)
             {
                 Console.WriteLine("\nInvalid menu option, press [ENTER] to try again.");
                 Console.ReadLine();
